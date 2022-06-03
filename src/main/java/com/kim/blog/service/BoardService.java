@@ -52,4 +52,14 @@ public class BoardService {
 		bRepository.deleteById(id);
 				
 	}
+	@org.springframework.transaction.annotation.Transactional
+	public void update(int id, board board) {
+		board board2 = bRepository.findById(id).orElseThrow(()->{
+			return new IllegalArgumentException("글 수정하기 실패 : 아이디를 찾을수 없습니다");
+		}); // 영속화 완료
+		board2.setTitle(board.getTitle());
+		board2.setContent(board.getContent());
+		// 해당 함수로 종료시 (service가 종료될때 ) 트랜잭션이 종료됩니다. 이때 더티체킹 - 자동업데이트 됨 db flush
+	}
+	
 }
